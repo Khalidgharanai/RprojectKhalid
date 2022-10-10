@@ -1,0 +1,69 @@
+#data manipulation with dplyr package
+library(dplyr)
+head(fmri)
+
+read.csv(url('https://raw.githubusercontent.com/mwaskom/seaborn-data/master/fmri.csv'))
+head(dffmri)
+
+filter(dffmri, timepoint >15)
+
+filter(dffmri, timepoint >15 & signal >0.0175)
+
+#data manipulation with dplyr package
+  #filter
+    #logial operators &, |, !
+unique(dffmri$region)
+Vulnerable=filter(dffmri,region=='frontal'| region=='parietal')
+head(Vulnerable)
+
+#event and region
+eventregion=filter(dffmri,(region=='frontal'|region=='parietal') & event=='cue')
+eventregion
+
+#use the function %in%
+unique(dffmri$timepoint)
+filter(dffmri, timepoint %in% c(15,18))
+filter(dffmri, region %in% c('frontal'))
+#for numerical >, <, ==
+filter(dffmri, timepoint>15)
+
+#data manipulation with dplyr package
+  #Arrange
+names(dffmri)
+head(arrange(dffmri,desc(subject)))
+head(arrange(dffmri, region))
+
+#data manipulation with dplyr package
+  #Select
+names(dffmri)
+select(dffmri, c(subject, event, signal))
+select(dffmri, region, everything())
+select(dffmri, event:subject)
+select(dffmri, -(event:subject))
+
+#data manipulation with dplyr package
+  #Rename
+names(dffmri)
+dffmri1=rename(dffmri, time=timepoint)
+head(dffmri1)
+
+#data manipulation with dplyr package
+  #Mutate
+head(dffmri)
+#time sign=timepoint+signal
+head(mutate(dffmri,time_sign=timepoint+signal))
+
+#data manipulation with dplyr package
+  #Summarize
+summarise(dffmri, mean(timepoint), mean(signal))
+event=group_by(dffmri, event)
+summarize(event, mean(timepoint), sd(timepoint))
+
+#data manipulation with dplyr package
+  #pull a column as a vector
+pull(dffmri, event)
+
+#data manipulation with dplyr package
+  #sample_n
+sampledffmri=sample_n(dffmri, 30)
+head(sampledffmri)
